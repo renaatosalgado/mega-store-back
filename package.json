@@ -1,0 +1,32 @@
+{
+  "name": "mega-store-back",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "npx nodemon src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/renaatosalgado/mega-store-back.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/renaatosalgado/mega-store-back/issues"
+  },
+  "homepage": "https://github.com/renaatosalgado/mega-store-back#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dayjs": "^1.10.7",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.2",
+    "joi": "^17.6.0",
+    "mongodb": "^4.3.1",
+    "uuid": "^8.3.2"
+  }
+}
