@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb";
+import { FindCursor, ObjectId } from "mongodb";
 import db from "../db.js";
 
 export async function singleProduct(req, res) {
@@ -15,5 +15,22 @@ export async function singleProduct(req, res) {
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
+  }
+}
+
+export async function addToCart(req, res) {
+  const product = req.body;
+  const user = res.locals.user;
+
+  try {
+    await db.collection("users").updateOne(
+      { _id: user._id },
+      {
+        $push: { cart: product },
+      }
+    );
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
   }
 }
