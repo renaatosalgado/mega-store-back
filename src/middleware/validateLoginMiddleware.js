@@ -1,7 +1,6 @@
 import { loginSchema } from "../schemas/loginSchema.js";
 
 export function validateLogin(req, res, next) {
-  const { email, password } = req.body;
 
   const validation = loginSchema.validate(req.body, { abortEarly: false });
 
