@@ -3,6 +3,7 @@ import db from "../db.js";
 export async function validateToken(req, res, next) {
   try {
     const { authorization } = req.headers;
+
     const token = authorization?.replace("Bearer ", "");
 
     if (!token) return res.sendStatus(401);
