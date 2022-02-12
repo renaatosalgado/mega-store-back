@@ -90,3 +90,18 @@ export async function getHomeThings(req, res) {
         res.sendStatus(500);
     }
 }
+
+export async function getInformatics(req, res) {
+    try {
+        const informatics = await db.collection("products").find({ category: "informatica" }).toArray();
+
+        if (!informatics) {
+            return res.sendStatus(404);
+        }
+
+        res.status(200).send(informatics);
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    }
+}
