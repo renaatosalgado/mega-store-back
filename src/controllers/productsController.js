@@ -23,13 +23,18 @@ export async function addToCart(req, res) {
   const user = res.locals.user;
 
   try {
-    await db.collection("users").updateOne(
-      { _id: user._id },
-      {
-        $push: { cart: product },
-      }
-    );
-    res.sendStatus(200);
+    const hasCart = await db.collection("carts").findOne({ userId: user._id });
+    if (hasCart) {
+      await db
+        .collection("carts")
+        .updateOne({ userId: user._id }, { $push: { cart: product } });
+      return res.sendStatus(201);
+    }
+    await db.collection("carts").insertOne({
+      userId: user._id,
+      cart: [product],
+    });
+    res.sendStatus(201);
   } catch (error) {
     console.log(error);
   }
@@ -39,7 +44,41 @@ export async function getCart(req, res) {
   const user = res.locals.user;
 
   try {
-    res.send(user.cart);
+    const userCart = await db.collection("carts").findOne({ userId: user._id });
+
+    res.send(userCart.cart);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function updateItemQuantity(req, res) {
+  const user = res.locals.user;
+  const { productId, newQuantity } = req.body;
+
+  try {
+    await db
+      .collection("carts")
+      .updateMany(
+        { userId: user._id },
+        { $set: { "cart.$[item].quantity": newQuantity } },
+        { arrayFilters: [{ "item._id": productId }] }
+      );
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function deleteItemFromCart(req, res) {
+  const user = res.locals.user;
+  const { productId } = req.params;
+  console.log(productId);
+
+  try {
+    db.collection("carts")
+      .updateMany({ userId: user._id }, { $pull: { cart: { _id: productId } } })
+      .then(res.sendStatus(200));
   } catch (error) {
     console.log(error);
   }
