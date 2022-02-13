@@ -23,13 +23,17 @@ export async function addToCart(req, res) {
   const user = res.locals.user;
 
   try {
-    await db.collection("users").updateOne(
-      { _id: user._id },
-      {
-        $push: { cart: product },
-      }
-    );
-    res.sendStatus(200);
+    const hasCart = await db.collection("carts").findOne({ userId: user._id });
+    if (hasCart) {
+      await db
+        .collection("carts")
+        .updateOne({ userId: user._id }, { $push: { cart: product } });
+      return res.sendStatus(201);
+    }
+    await db
+      .collection("carts")
+      .insertOne({ userId: user._id, cart: [product] });
+    res.sendStatus(201);
   } catch (error) {
     console.log(error);
   }

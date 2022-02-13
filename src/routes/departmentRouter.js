@@ -1,5 +1,13 @@
 import { Router } from "express";
-import { getBooks, getCellphones, getEletro, getFashion, getGames, getHomeThings, getInformatics } from "../controllers/departmentController.js";
+import {
+  getBooks,
+  getCellphones,
+  getEletro,
+  getFashion,
+  getGames,
+  getHomeThings,
+  getInformatics,
+} from "../controllers/departmentController.js";
 
 const departmentRouter = Router();
 
