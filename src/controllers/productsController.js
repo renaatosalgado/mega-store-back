@@ -30,9 +30,10 @@ export async function addToCart(req, res) {
         .updateOne({ userId: user._id }, { $push: { cart: product } });
       return res.sendStatus(201);
     }
-    await db
-      .collection("carts")
-      .insertOne({ userId: user._id, cart: [product], totalItens: product.quantity });
+    await db.collection("carts").insertOne({
+      userId: user._id,
+      cart: [product],
+    });
     res.sendStatus(201);
   } catch (error) {
     console.log(error);
@@ -54,8 +55,6 @@ export async function getCart(req, res) {
 export async function updateItemQuantity(req, res) {
   const user = res.locals.user;
   const { productId, newQuantity } = req.body;
-  console.log(newQuantity)
-  console.log(productId)
 
   try {
     await db
@@ -66,6 +65,20 @@ export async function updateItemQuantity(req, res) {
         { arrayFilters: [{ "item._id": productId }] }
       );
     res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function deleteItemFromCart(req, res) {
+  const user = res.locals.user;
+  const { productId } = req.params;
+  console.log(productId);
+
+  try {
+    db.collection("carts")
+      .updateMany({ userId: user._id }, { $pull: { cart: { _id: productId } } })
+      .then(res.sendStatus(200));
   } catch (error) {
     console.log(error);
   }
