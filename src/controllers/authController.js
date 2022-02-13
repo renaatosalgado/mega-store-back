@@ -40,3 +40,20 @@ export async function login(req, res) {
     res.status(500).send(error);
   }
 }
+
+export async function deleteSession(req, res) {
+  const { tokenNumber } = req.params;
+
+  try {
+    const session = await db
+      .collection("sessions")
+      .findOne({ token: tokenNumber });
+
+    if (!session) return res.sendStatus(404);
+
+    await db.collection("sessions").deleteOne({ token: tokenNumber });
+    res.sendStatus(200);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
