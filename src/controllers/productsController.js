@@ -32,7 +32,7 @@ export async function addToCart(req, res) {
     }
     await db
       .collection("carts")
-      .insertOne({ userId: user._id, cart: [product] });
+      .insertOne({ userId: user._id, cart: [product], totalItens: product.quantity });
     res.sendStatus(201);
   } catch (error) {
     console.log(error);
@@ -43,7 +43,29 @@ export async function getCart(req, res) {
   const user = res.locals.user;
 
   try {
-    res.send(user.cart);
+    const userCart = await db.collection("carts").findOne({ userId: user._id });
+
+    res.send(userCart.cart);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function updateItemQuantity(req, res) {
+  const user = res.locals.user;
+  const { productId, newQuantity } = req.body;
+  console.log(newQuantity)
+  console.log(productId)
+
+  try {
+    await db
+      .collection("carts")
+      .updateMany(
+        { userId: user._id },
+        { $set: { "cart.$[item].quantity": newQuantity } },
+        { arrayFilters: [{ "item._id": productId }] }
+      );
+    res.sendStatus(200);
   } catch (error) {
     console.log(error);
   }
