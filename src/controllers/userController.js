@@ -35,7 +35,7 @@ export async function getOrders(req, res) {
       .collection("orders")
       .findOne({ userId: user._id });
 
-    res.send(userOrder);
+    res.status(200).send(userOrder);
   } catch (error) {
     res.send(error).status(500);
   }
