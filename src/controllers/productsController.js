@@ -73,7 +73,6 @@ export async function updateItemQuantity(req, res) {
 export async function deleteItemFromCart(req, res) {
   const user = res.locals.user;
   const { productId } = req.params;
-  console.log(productId);
 
   try {
     db.collection("carts")
@@ -85,8 +84,7 @@ export async function deleteItemFromCart(req, res) {
 }
 
 export async function deleteCart(req, res) {
-  const { user } = res.locals;
-  console.log(user);
+  const user = res.locals.user;
 
   try {
     db.collection("carts").deleteOne({ userId: user._id });
