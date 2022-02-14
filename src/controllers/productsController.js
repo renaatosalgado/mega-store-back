@@ -93,7 +93,6 @@ export async function deleteCart(req, res) {
 
     res.sendStatus(200);
   } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
+    res.send(error).status(500);
   }
 }
