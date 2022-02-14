@@ -83,3 +83,17 @@ export async function deleteItemFromCart(req, res) {
     console.log(error);
   }
 }
+
+export async function deleteCart(req, res) {
+  const { user } = res.locals;
+  console.log(user);
+
+  try {
+    db.collection("carts").deleteOne({ userId: user._id });
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+}
